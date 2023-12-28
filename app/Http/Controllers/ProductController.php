@@ -11,17 +11,52 @@ class ProductController extends Controller
 {
 
 
+    // public function getData(Request $request)
+    // {
+    //     $perPage = $request->input('per_page', 25);
+    //     $items = Product::paginate($perPage);
+
+    //     // $items = Product::all();
+
+
+    //     return response()->json($items);
+    // }
     public function getData(Request $request)
     {
-        $perPage = $request->input('per_page', 25);
-        $items = Product::paginate($perPage);
-
-        // $items = Product::all();
-
-
-        return response()->json($items);
+        try {
+            $perPage = $request->input('per_page', 25);
+            
+            $query = Product::query();
+    
+    
+            $query->when($request->filled('name'), function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->input('name') . '%');
+            });
+    
+            $query->when($request->filled('description'), function ($q) use ($request) {
+                $q->where('description', 'LIKE', '%' . $request->input('description') . '%');
+            });
+    
+            $query->when($request->filled('price'), function ($q) use ($request) {
+                $q->where('price', '=', $request->input('price'));
+            });
+    
+            $query->when($request->filled('expiration_date'), function ($q) use ($request) {
+                $q->whereDate('expiration_date', '=', $request->input('expiration_date'));
+            });
+    
+            $query->when($request->filled('category_id'), function ($q) use ($request) {
+                $q->where('category_id', '=', $request->input('category_id'));
+            });
+    
+            $items = $query->paginate($perPage);
+    
+            return response()->json($items);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-
+    
 
     public function getById($id)
     {
@@ -78,7 +113,7 @@ class ProductController extends Controller
                 $product->image = url($path . $imageName);
 
             }
-            
+
             $product->save();
 
             return response()->json($product);
