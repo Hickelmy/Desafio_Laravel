@@ -11,8 +11,7 @@
 
 ## UML do banco de dados
 
-https://www.notion.so/Documenta-o-sobre-o-Desafio-laravel-18ec18733ba547309de03988df3aae79
-
+https://www.notion.so/Documenta-o-sobre-o-Desafio-laravel-18ec18733ba547309de03988df3aae79?pvs=4
 
 
 ## About Laravel
