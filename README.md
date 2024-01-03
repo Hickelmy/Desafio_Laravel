@@ -21,7 +21,7 @@ composer install
 ```
 
 # npm
-docker compose up
+docker compose up -d
 
 ```
 
